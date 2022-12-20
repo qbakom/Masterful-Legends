@@ -1,25 +1,52 @@
 import requests
 import json
 
-API_KEY = 'RGAPI-50755c97-1335-4f92-bd39-40c2c377eb2a'
+API_KEY = 'RGAPI-1f2a2cf5-6667-4ccb-adff-6570d9db43c6'
 CHAMP_URL = 'http://ddragon.leagueoflegends.com/cdn/11.19.1/data/de_DE/champion.json'
 champs = requests.get(CHAMP_URL).json()
-
-# f = open('bootcamp_info.json')
-# players = json.load(f)
 
 
 def get_lp_for_chall(server):
     url = f'https://{server}.api.riotgames.com/lol/league/v4/challengerleagues/by-queue/RANKED_SOLO_5x5?api_key={API_KEY}'
     chall_players = requests.get(url).json()['entries']
-    chall_players = sorted(chall_players, key=lambda k: k['leaguePoints'], reverse=True)
+    chall_players = sorted(
+        chall_players, key=lambda k: k['leaguePoints'], reverse=True)
     return chall_players[299]['leaguePoints']
+
+
+
+#odjebałem jako hash map powinien być lolpros request
+
+def unknown_players(players):
+    unknown_players = []
+    players_count = dict()
+
+    for i in range(len(players)):
+        player = players[i]["summonerName"]
+
+        if player in players_count:
+            players_count[player] += 1
+        else:
+            players_count[player] = 1
+
+    for name, x in players_count.items():
+        if x > 1:
+            del players_count[name]
+        else:
+            unknown_players.append(name)
+
+    return unknown_players
+
+
+def all_challs(server):
+    url = f'https://{server}.api.riotgames.com/lol/league/v4/challengerleagues/by-queue/RANKED_SOLO_5x5?api_key={API_KEY}'
 
 
 def get_lp_for_gm(server):
     url = f'https://{server}.api.riotgames.com/lol/league/v4/grandmasterleagues/by-queue/RANKED_SOLO_5x5?api_key={API_KEY}'
     gm_players = requests.get(url).json()['entries']
-    gm_players = sorted(gm_players, key=lambda k: k['leaguePoints'], reverse=True)
+    gm_players = sorted(
+        gm_players, key=lambda k: k['leaguePoints'], reverse=True)
     return gm_players[699]['leaguePoints']
 
 
@@ -27,7 +54,7 @@ def check_if_in_game(summoner_id):
     url = f'https://euw1.api.riotgames.com/lol/spectator/v4/active-games/by-summoner/{summoner_id}?api_key={API_KEY}'
     respone = requests.get(url)
     if respone.status_code == 200:
-       return True
+        return True
     return False
 
 
@@ -86,10 +113,12 @@ def get_current_elo(player):
     response_json = response.json()
     top_account = response_json['league_player']['accounts'][0]
     if int(top_account['rank']['tier'][0]) >= 3:
-        rank = top_account['rank']['tier'][3:].capitalize() + str(top_account['rank']['rank'])
+        rank = top_account['rank']['tier'][3:].capitalize(
+        ) + str(top_account['rank']['rank'])
     else:
         rank = top_account['rank    ']['tier'][3:].capitalize()
     return f"{top_account['summoner_name']}: {rank} {top_account['rank']['league_points']}lp"
+
 
 def get_summoners_info(summoner_name):
     url = f'https://euw1.api.riotgames.com/lol/summoner/v4/summoners/by-name/{summoner_name}?api_key={API_KEY}'
@@ -106,29 +135,6 @@ def make_info_json_file():
 
     with open('bootcamp_info.json', 'w', encoding='utf-8') as f:
         json.dump(players, f, indent=4)
-
-#Bootcamp korea + china worlds 2021
-# def get_players_ingame():
-#     players_ingame = []
-#     for player in players:
-#         if check_if_in_game(player['id']):
-#             players_ingame.append(player['nick'])
-#     return players_ingame
-
-# def get_most_stacked_game():
-#     games = {}
-#     for player in players:
-#         url = f'https://euw1.api.riotgames.com/lol/spectator/v4/active-games/by-summoner/{player["id"]}?api_key={API_KEY}'
-#         response = requests.get(url)
-#         if response.status_code == 200:
-#             response = response.json()
-#             pros = []
-#             for participant in response['participants']:
-#                 if any(d['name'] == participant['summonerName'] for d in players):
-#                     pros.append(player['nick'])
-#             games[response['gameId']] = pros
-#     keys = sorted(games, key=lambda k: len(games[k]), reverse=True)
-#     return games[keys[0]]
 
 
 servers = {
@@ -151,7 +157,8 @@ def get_champion_id(champion):
         # print(champ['id'].lower(), name, champion)
         if champ['id'].lower() == champion:
             return champ['key']
-    return champs['data'][champion.capitalize()]['key'] 
+    return champs['data'][champion.capitalize()]['key']
+
 
 def get_mastery_points(id, champion, server):
     champion = champion.replace("'", "").replace(" ", "")
@@ -165,4 +172,3 @@ def get_mastery_points(id, champion, server):
     URL = f'https://euw1.api.riotgames.com/lol/champion-mastery/v4/champion-masteries/by-summoner/{id}/by-champion/{champion_id}?api_key={API_KEY}'
     print(requests.get(URL).json())
     return requests.get(URL).json()['championPoints']
-
