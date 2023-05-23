@@ -1,14 +1,14 @@
+import requests
 from bs4 import BeautifulSoup
 
-html_code = '<span data-v-bd539a1a="" aria-label="LuvFlakkedCheeks" class="summoner-name hint--top">LuvFlakkedCheeks</span>'
-soup = BeautifulSoup(html_code, "html.parser")
+CHAMP_URL = 'http://ddragon.leagueoflegends.com/cdn/11.19.1/data/de_DE/champion.json'
+champs = requests.get(CHAMP_URL).json()
 
-span_element = soup.find("span", class_="summoner-name")
-if span_element:
-    summoner_name = span_element["aria-label"]
-    if summoner_name and "unranked" not in summoner_name.lower():
-        print("Summoner Name:", summoner_name)
-    else:
-        print("Skipping unranked account")
-else:
-    print("No summoner name found in the HTML code.")
+def get_champion_id(champion):
+    for name, champ in champs['data'].items():
+        # print(champ['id'].lower(), name, champion)
+        if champ['id'].lower() == champion:
+            return champ['key']
+    return champs['data'][champion.capitalize()]['key']
+    
+print(get_champion_id("viego"))

@@ -1,0 +1,52 @@
+I skipped accounts that are within drop-down list on lolpros (Insignificant for both statistics and players")
+
+
+
+
+
+
+
+
+
+If the accounts you want to retrieve are located within a drop-down list and not directly within the HTML code, you need to adjust your scraping strategy. Instead of using the BeautifulSoup library to select elements by class, you can try using the selenium library, which allows you to automate interactions with web pages.
+
+Here's an example of how you can modify your code to scrape accounts from a drop-down list using selenium:
+
+python
+
+from selenium import webdriver
+from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.common.by import By
+from selenium.webdriver.chrome.options import Options
+
+def get_accounts(pro_player):
+    options = Options()
+    options.add_argument("--headless")  # Run Chrome in headless mode
+    service = Service("/path/to/chromedriver")  # Replace with the path to your chromedriver executable
+    driver = webdriver.Chrome(service=service, options=options)
+    
+    url = f"https://lolpros.gg/player/{pro_player}"
+    driver.get(url)
+
+    accounts = []
+    account_elements = driver.find_elements(By.CLASS_NAME, "account")
+    for element in account_elements:
+        account = element.get_attribute("aria-label")
+        accounts.append(account)
+    
+    driver.quit()
+    accounts = list(filter(lambda x: x is not None, accounts))
+    return accounts
+
+pro_player = "Jankos"
+accounts = get_accounts(pro_player)
+if accounts:
+    print(f"Valid accounts of {pro_player}:")
+    for account in accounts:
+        print(account)
+else:
+    print(f"No valid accounts found for {pro_player}")
+
+In this modified code, we use the selenium library to instantiate a headless Chrome browser and navigate to the URL. We then find the account elements using the find_elements() method with the By.CLASS_NAME locator, and extract the account names using the get_attribute() method. Finally, we filter out None values from the accounts list and return the result.
+
+Make sure you have the selenium library installed (pip install selenium) and provide the path to the chromedriver executable, which is required by Selenium to control the Chrome browser. Adjust the "/path/to/chromedriver" in the code to the actual path of the chromedriver executable on your system.
