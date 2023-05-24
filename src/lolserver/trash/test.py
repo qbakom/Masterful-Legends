@@ -57,9 +57,9 @@ def get_players_from_live_game(channel):
             except:
                 name = None
             champion_id = player['championId']
-            champion_name = api.get_champ_name_from_id(champion_id)
+            champion = api.get_champ_name_from_id(champion_id)
             if name:
-                players_in_game.append([name, champion_name])
+                players_in_game.append([name, champion])
     return players_in_game
 
 

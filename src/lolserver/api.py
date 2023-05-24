@@ -1,7 +1,8 @@
 import requests
 import json
+import api_key
 
-API_KEY = 'RGAPI-2894c5d9-9bb5-4d14-a851-3da3f39e1faa'
+API_KEY = api_key.API_KEY
 CHAMP_URL = 'http://ddragon.leagueoflegends.com/cdn/11.19.1/data/de_DE/champion.json'
 champs = requests.get(CHAMP_URL).json()
 
@@ -67,9 +68,9 @@ def get_players_from_live_game(channel):
             except:
                 name = None
             champion_id = player['championId']
-            champion_name = get_champ_name_from_id(champion_id)
+            champion = get_champ_name_from_id(champion_id)
             if name:
-                players_in_game.append([name, champion_name])
+                players_in_game.append([name, champion])
     return players_in_game
 
 
@@ -157,7 +158,7 @@ def get_champion_id(champion):
     return champs['data'][champion.capitalize()]['key']
 
 
-def get_mastery_points(id, champion, server):
+def get_mastery_points(id, champion):
     champion = champion.replace("'", "").replace(" ", "")
     try:
         champion_id = get_champion_id(champion)

@@ -1,20 +1,26 @@
 import requests
 from bs4 import BeautifulSoup
 import re
+import api_key
 
-API_KEY = "RGAPI-1c1be7c7-544c-493f-9921-62d675d71fd3"
-# SUMMONER_NAME = "Infiros"
-# CHAMPION_NAME = "Viego"
+API_KEY = api_key.API_KEY
 CHAMP_URL = 'http://ddragon.leagueoflegends.com/cdn/11.19.1/data/de_DE/champion.json'
 champs = requests.get(CHAMP_URL).json()
 
-def get_champion_id(champion):
-    clean_champion = re.sub(r'\W+', '', champion)
-    clean_champion = clean_champion.capitalize()
+def get_champion(champion):
+    clean_champion = re.sub(r'\W+', '', champion)  
+    clean_champion = clean_champion.capitalize()  
+
     for champ_key, champ_data in champs['data'].items():
         if champ_data['id'].lower() == clean_champion.lower():
             return champ_key
-    return int(champs['data'][champion.capitalize()]['key'])
+        if champ_data['name'].lower() == clean_champion.lower():
+            return champ_key
+        if champ_data['id'].lower().startswith(clean_champion.lower()):
+            return champ_key
+        
+def get_champion_id(champion):
+    return int(champs['data'][champion]['key'])
 
 
 def get_summoner_id(summoner_name):
@@ -62,8 +68,8 @@ def get_accounts(pro_player):
 #     return response.status_code == 200
     
 
-def sum_mastery_points(pro_player, champion_name):
-    champion_id = get_champion_id(champion_name)
+def sum_mastery_points(pro_player, champion):
+    champion_id = get_champion_id(champion)
     accounts = get_accounts(pro_player)
     total_mastery_points = 0
     for account in accounts:
@@ -72,13 +78,6 @@ def sum_mastery_points(pro_player, champion_name):
             mastery_points = get_mastery_points(summoner_id, champion_id)
             total_mastery_points += mastery_points
     return total_mastery_points
-"""
-summoner_id = get_summoner_id(SUMMONER_NAME)
-champion_id = get_champion_id(CHAMPION_NAME)
-if summoner_id:
-    mastery_points = get_mastery_points(summoner_id, champion_id)
-    print(f"{SUMMONER_NAME} has {mastery_points} mastery points on {CHAMPION_NAME}")
-"""    
 
 player = "Jankos"
 accounts = get_accounts(player)
@@ -87,6 +86,8 @@ for acc in accounts:
 
 
 pro_player = "Jankos"
-champion_name = "akali"
-mastery_points = sum_mastery_points(pro_player, champion_name)
-print(f"Total mastery points for {pro_player} on {champion_name}: {mastery_points}")
+while 1:
+    champion = input()
+    champion = get_champion(champion)
+    mastery_points = sum_mastery_points(pro_player, champion)
+    print(f"Total mastery points for {pro_player} on {champion}: {mastery_points}")
