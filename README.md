@@ -1,6 +1,6 @@
 # Masterful Legends
 
-The Masterful Legends is an application that allows young players to look up best professional League of Legends players on a specific champion. It tracks and stores the mastery points of professional League of Legends players on specific champions. It uses data from the Riot Games API and the lolpros.gg website to retrieve and store the relevant information. LolPros allows you to see all registered accounts of every league of legends pro player. My project shows how many mastery points each player has in sum on all accounts. Mastery points are points that are collected through playing and getting good scores in games.
+The Masterful Legends is an application that allows young players to look up the best professional League of Legends players on a specific champion. It tracks and stores the mastery points of professional League of Legends players on specific champions. It uses data from the Riot Games API and the lolpros.gg website to retrieve and store the relevant information. LolPros allows you to see all registered accounts of every league of legends pro player. My project shows how many mastery points each player has in sum on all accounts. Mastery points are points that are collected through playing and getting good scores in games.
 
 ## Features
 
