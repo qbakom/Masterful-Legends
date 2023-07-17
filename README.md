@@ -16,14 +16,14 @@ The Masterful Legends is an application that allows young players to look up the
 
 To run the Mastery Points Tracker, you need the following:
 
-- Python 3.x
+- Python 3
 - Required Python packages (requests, BeautifulSoup, sqlite3)
 - Riot Games API key (to access summoner and mastery point data)
 
 ## Usage
 
 1. Clone the repository:
-git clone https://github.com/your-username/mastery-points-tracker.git
+git clone https://github.com/qbakom/Masterful-Legends.git
 
 2. Install the required Python packages:
 pip install requests beautifulsoup4
