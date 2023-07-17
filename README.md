@@ -1,6 +1,6 @@
 # Masterful Legends
 
-The Mastery Points Tracker is a Python application that allows you to track and store the mastery points of professional League of Legends players on specific champions. It uses data from the Riot Games API and the lolpros.gg website to retrieve and store the relevant information. LolPros allows you to see all registered accounts of every league of legends pro player. My project shows how many mastery points each player has in sum on all accounts. Mastery points are points that are collected through playing and getting good scores in games.
+The Mastery Points Tracker is an application that allows you to track and store the mastery points of professional League of Legends players on specific champions. It uses data from the Riot Games API and the lolpros.gg website to retrieve and store the relevant information. LolPros allows you to see all registered accounts of every league of legends pro player. My project shows how many mastery points each player has in sum on all accounts. Mastery points are points that are collected through playing and getting good scores in games.
 
 ## Features
 
@@ -28,7 +28,7 @@ git clone https://github.com/your-username/mastery-points-tracker.git
 2. Install the required Python packages:
 pip install requests beautifulsoup4
 
-. Obtain a Riot Games API key. You can follow the official documentation to create a developer account and obtain the key.
+3. Obtain a Riot Games API key. You can follow the official documentation to create a developer account and obtain the key.
 
 4. Set up a lolpros.gg account. This is required to retrieve pro player accounts.
 
