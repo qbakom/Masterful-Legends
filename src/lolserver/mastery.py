@@ -79,15 +79,33 @@ def sum_mastery_points(pro_player, champion):
             total_mastery_points += mastery_points
     return total_mastery_points
 
-player = "Jankos"
-accounts = get_accounts(player)
-for acc in accounts:
-    print(acc)
+def has_social_media_channels(player):
+    player_url = f"https://lolpros.gg/player/{player}"
+    response = requests.get(player_url)
+    
+    if response.status_code == 200:
+        soup = BeautifulSoup(response.content, "html.parser")
+        
+        youtube_links = soup.select('a[href*="youtube.com"]')
+        twitch_links = soup.select('a[href*="twitch.tv"]')
+        
+        if youtube_links or twitch_links:
+            return True
+        else:
+            return False
+    else:
+        print("Failed to retrieve social media channels. Status code:", response.status_code)
+        return False
+
+# player = "Jankos"
+# accounts = get_accounts(player)
+# for acc in accounts:
+#     print(acc)
 
 
-pro_player = "Jankos"
-while 1:
-    champion = input()
-    champion = get_champion(champion)
-    mastery_points = sum_mastery_points(pro_player, champion)
-    print(f"Total mastery points for {pro_player} on {champion}: {mastery_points}")
+# pro_player = "Jankos"
+# while 1:
+#     champion = input()
+#     champion = get_champion(champion)
+#     mastery_points = sum_mastery_points(pro_player, champion)
+#     print(f"Total mastery points for {pro_player} on {champion}: {mastery_points}")
